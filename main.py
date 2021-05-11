@@ -65,7 +65,7 @@ kwargs = {'num_workers': 1, 'pin_memory': True} if use_cuda else {}
 # Load MNIST only if training
 if args.train:
     train_loader = torch.utils.data.DataLoader(
-        datasets.MNIST(root=args.dataroot, train=True, download=True,
+        datasets.MNIST(root=args.dataroot, train=True, download=False,
                        transform=transforms.Compose([
                            transforms.ToTensor(),
                            transforms.Normalize((0.1307,), (0.3081,))
@@ -218,5 +218,5 @@ if args.train:
 if args.evaluate:
     accuracy = test_image()
 
-log.param("accuracy", accuracy)
+e.log_param("accuracy", accuracy)
 e.finish()
