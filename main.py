@@ -161,8 +161,11 @@ def test(args, model, device, test_loader, epoch):
     print('{{"metric": "Eval - Accuracy", "value": {}, "epoch": {}}}'.format(
         100. * correct / len(test_loader.dataset), epoch))
     
+    accuracy = correct / len(test_loader.dataset)
     e.log_metric("epoch_loss", Xs=[epoch], Ys=[test_loss], grouping=["test"])
-    e.log_metric("epoch_accuracy", Xs=[epoch], Ys=[correct / len(test_loader.dataset)])
+    e.log_metric("epoch_accuracy", Xs=[epoch], Ys=[accuracy])
+    
+    return accuracy
 
 
 def test_image():
@@ -203,7 +206,7 @@ if args.train:
     # Train + Test per epoch
     for epoch in range(1, args.epochs + 1):
         train(args, model, device, train_loader, optimizer, epoch)
-        test(args, model, device, test_loader, epoch)
+        accuracy = test(args, model, device, test_loader, epoch)
 
     # Do checkpointing - Is saved in outf
     outfile = '%s/mnist_convnet_model_epoch_%d.pth' % (args.outf, args.epochs)
@@ -213,6 +216,7 @@ if args.train:
 
 # Evaluate?
 if args.evaluate:
-    test_image()
+    accuracy = test_image()
 
+log.param("accuracy", accuracy)
 e.finish()
