@@ -12,6 +12,8 @@ import numpy as np
 from torchvision import datasets, transforms
 from torch.autograd import Variable
 
+from cnvrg import Experiment
+
 # Training settings
 parser = argparse.ArgumentParser(description='PyTorch MNIST Example')
 parser.add_argument('--dataroot', default="/input/" ,help='path to dataset')
@@ -109,10 +111,15 @@ if args.ckpf != '':
 
 optimizer = optim.SGD(model.parameters(), lr=args.lr, momentum=args.momentum)
 
+e = Experiment.init()
 
 def train(args, model, device, train_loader, optimizer, epoch):
     """Training"""
+    
     model.train()
+    
+    tot_loss = 0
+    
     for batch_idx, (data, target) in enumerate(train_loader):
         data, target = data.to(device), target.to(device)
         optimizer.zero_grad()
@@ -126,6 +133,10 @@ def train(args, model, device, train_loader, optimizer, epoch):
                 100. * batch_idx / len(train_loader), loss.item()))
             print('{{"metric": "Train - NLL Loss", "value": {}}}'.format(
         loss.item()))
+        e.log_metric("batch_loss", Ys=[loss.item()])
+        tot_loss += loss.item()
+    
+    e.log_metric("epoch_loss", Xs=[epoch], Ys=[tot_loss / len(train_loader)], grouping=["train"])
 
 
 def test(args, model, device, test_loader, epoch):
@@ -149,6 +160,9 @@ def test(args, model, device, test_loader, epoch):
         test_loss, epoch))
     print('{{"metric": "Eval - Accuracy", "value": {}, "epoch": {}}}'.format(
         100. * correct / len(test_loader.dataset), epoch))
+    
+    e.log_metric("epoch_loss", Xs=[epoch], Ys=[test_loss], grouping=["test"])
+    e.log_metric("epoch_accuracy", Xs=[epoch], Ys=[correct / len(test_loader.dataset)])
 
 
 def test_image():
@@ -192,8 +206,13 @@ if args.train:
         test(args, model, device, test_loader, epoch)
 
     # Do checkpointing - Is saved in outf
-    torch.save(model.state_dict(), '%s/mnist_convnet_model_epoch_%d.pth' % (args.outf, args.epochs))
+    outfile = '%s/mnist_convnet_model_epoch_%d.pth' % (args.outf, args.epochs)
+    torch.save(model.state_dict(), outfile)
+    
+    e.log_artifacts([outfile])
 
 # Evaluate?
 if args.evaluate:
     test_image()
+
+e.finish()
