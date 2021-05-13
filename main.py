@@ -22,7 +22,7 @@ parser.add_argument('--outf', default='models',
                     help='folder to output images and model checkpoints')
 parser.add_argument('--ckpf', default='',
                     help="path to model checkpoint file (to continue training)")
-parser.add_argument('--batch-size', type=int, default=64, metavar='N',
+parser.add_argument('--batch-size', type=float, default=64, metavar='N',
                     help='input batch size for training (default: 64)')
 parser.add_argument('--test-batch-size', type=int, default=1000, metavar='N',
                     help='input batch size for testing (default: 1000)')
@@ -70,13 +70,13 @@ if args.train:
                            transforms.ToTensor(),
                            transforms.Normalize((0.1307,), (0.3081,))
                        ])),
-        batch_size=args.batch_size, shuffle=True, **kwargs)
+        batch_size=int(round(args.batch_size)), shuffle=True, **kwargs)
     test_loader = torch.utils.data.DataLoader(
         datasets.MNIST(root=args.dataroot, train=False, transform=transforms.Compose([
                            transforms.ToTensor(),
                            transforms.Normalize((0.1307,), (0.3081,))
                        ])),
-        batch_size=args.test_batch_size, shuffle=True, **kwargs)
+        batch_size=int(round(args.test_batch_size)), shuffle=True, **kwargs)
 
 
 class Net(nn.Module):
