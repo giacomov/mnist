@@ -111,7 +111,10 @@ if args.ckpf != '':
 
 optimizer = optim.SGD(model.parameters(), lr=args.lr, momentum=args.momentum)
 
-e = Experiment()
+try:
+    e = Experiment()
+except:
+    e = Experiment.init()
 
 def train(args, model, device, train_loader, optimizer, epoch):
     """Training"""
