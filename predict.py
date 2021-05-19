@@ -6,6 +6,7 @@ import torch
 import torch.nn.functional as F
 
 
+
 weights = glob.glob("models/*.pth")
 if len(weights) == 0:
     raise IOError("Could not find any model")

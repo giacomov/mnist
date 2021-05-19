@@ -33,7 +33,7 @@ class Net(nn.Module):
             return F.log_softmax(x, dim=1)
 
 
-if __name__=="__main":
+if __name__=="__main__":
     
     from cnvrg import Experiment
     
@@ -41,7 +41,7 @@ if __name__=="__main":
     parser = argparse.ArgumentParser(description='PyTorch MNIST Example')
     parser.add_argument('--dataroot', default="/input/" ,help='path to dataset')
     parser.add_argument('--evalf', default="/eval/" ,help='path to evaluate sample')
-    parser.add_argument('--outf', default='models',
+    parser.add_argument('--outf', default='output',
                         help='folder to output images and model checkpoints')
     parser.add_argument('--ckpf', default='',
                         help="path to model checkpoint file (to continue training)")
