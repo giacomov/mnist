@@ -1,12 +1,18 @@
-from main import Net
+from train import Net
 from PIL import Image
 import numpy as np
+import glob
 import torch
 import torch.nn.functional as F
 
 
+weights = glob.glob("models/*.pth")
+if len(weights) == 0:
+    raise IOError("Could not find any model")
+print(f"Found {len(weights)} models, using {weights[0]}")
+
 model = Net()
-model.load_state_dict(torch.load("models/mnist_convnet_model_epoch_3.pth"))
+model.load_state_dict(torch.load(weights[0]))
 
 
 def predict(file_path):
