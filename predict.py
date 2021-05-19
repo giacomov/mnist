@@ -7,7 +7,7 @@ import torch.nn.functional as F
 
 
 
-weights = glob.glob("models/*.pth")
+weights = glob.glob("output/*.pth")
 if len(weights) == 0:
     raise IOError("Could not find any model")
 print(f"Found {len(weights)} models, using {weights[0]}")
@@ -23,7 +23,7 @@ def predict(file_path):
     img = img.astype('float32')
     img = img / 255.0
     digit = F.softmax(model(torch.from_numpy(img)), dim=1)
-    return str(int(digit[0].argmax()+1))
+    return str(int(digit[0].argmax()))
 
 
 if __name__ == "__main__":
