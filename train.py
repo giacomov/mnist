@@ -141,7 +141,7 @@ if __name__=="__main__":
             e.log_metric("batch_loss", Ys=[loss.item()])
             tot_loss += loss.item()
 
-        e.log_metric("epoch_loss", Xs=[epoch], Ys=[tot_loss / len(train_loader)], grouping=["train"])
+        e.log_metric("epoch-loss", Xs=[epoch], Ys=[tot_loss / len(train_loader)], grouping=["train"])
 
 
     def test(args, model, device, test_loader, epoch):
@@ -167,8 +167,8 @@ if __name__=="__main__":
             100. * correct / len(test_loader.dataset), epoch))
 
         accuracy = correct / len(test_loader.dataset)
-        e.log_metric("epoch_loss", Xs=[epoch], Ys=[test_loss], grouping=["test"])
-        e.log_metric("epoch_accuracy", Xs=[epoch], Ys=[accuracy])
+        e.log_metric("epoch-loss", Xs=[epoch], Ys=[test_loss], grouping=["test"])
+        e.log_metric("epoch-accuracy", Xs=[epoch], Ys=[accuracy])
 
         return accuracy
 
