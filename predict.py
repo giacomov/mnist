@@ -12,8 +12,9 @@ if len(weights) == 0:
     raise IOError("Could not find any model")
 print(f"Found {len(weights)} models, using {weights[0]}")
 
+device = torch.device('cpu')
 model = Net()
-model.load_state_dict(torch.load(weights[0]))
+model.load_state_dict(torch.load(weights[0], map_location=device))
 
 
 def predict(file_path):
