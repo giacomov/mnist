@@ -217,7 +217,7 @@ if __name__=="__main__":
         outfile = '%s/mnist_convnet_model_epoch_%d.pth' % (args.outf, args.epochs)
         torch.save(model.state_dict(), outfile)
 
-        e.log_artifacts([outfile])
+        e.log_artifacts([outfile], "output")
 
     # Evaluate?
     if args.evaluate:
